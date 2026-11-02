@@ -1,6 +1,5 @@
 import streamlit as st
 from utils.aluno_context import selecionar_aluno
-from utils.navigation import mostrar_navegacao
 from services.demo import mostrar_aviso
 from services.api_client import (
     criar_exercicio,
@@ -11,10 +10,10 @@ from services.api_client import (
 )
 
 st.set_page_config(
+    initial_sidebar_state="auto",
     page_title="Gestão de Fichas e Treinos", page_icon=":material/fitness_center:", layout="wide"
 )
 
-mostrar_navegacao()
 st.title("Gestão de Treinos e Exercícios", icon=":material/fitness_center:")
 mostrar_aviso()
 

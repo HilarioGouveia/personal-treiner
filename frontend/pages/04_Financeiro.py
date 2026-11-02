@@ -2,7 +2,6 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 from utils.aluno_context import selecionar_aluno
-from utils.navigation import mostrar_navegacao
 from services.demo import mostrar_aviso
 from services.api_client import (
     atualizar_mensalidade,
@@ -12,10 +11,10 @@ from services.api_client import (
 )
 
 st.set_page_config(
+    initial_sidebar_state="auto",
     page_title="Gestão Financeira", page_icon=":material/account_balance_wallet:", layout="wide"
 )
 
-mostrar_navegacao()
 st.title("Gestão Financeira de Mensalidades", icon=":material/account_balance_wallet:")
 mostrar_aviso()
 

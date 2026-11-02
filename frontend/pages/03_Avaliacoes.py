@@ -2,7 +2,6 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 from utils.aluno_context import selecionar_aluno
-from utils.navigation import mostrar_navegacao
 from services.demo import mostrar_aviso
 from utils.charts import grafico_evolucao
 from services.api_client import (
@@ -12,10 +11,10 @@ from services.api_client import (
 )
 
 st.set_page_config(
+    initial_sidebar_state="auto",
     page_title="Avaliação Física e Evolução", page_icon=":material/monitoring:", layout="wide"
 )
 
-mostrar_navegacao()
 st.title("Avaliação Física e Gráficos de Evolução", icon=":material/monitoring:")
 mostrar_aviso()
 

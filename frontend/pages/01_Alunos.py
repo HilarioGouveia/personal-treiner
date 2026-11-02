@@ -2,9 +2,9 @@ import streamlit as st
 from services.api_client import criar_aluno, get_alunos
 from utils.styles import aplicar_estilo_tech_minimalista
 from services.demo import mostrar_aviso
-from utils.navigation import mostrar_navegacao
 
 st.set_page_config(
+    initial_sidebar_state="auto",
     page_title="Gestão de Alunos", page_icon=":material/group:", layout="wide"
 )
 
@@ -12,7 +12,6 @@ st.set_page_config(
 # Aplicar o tema visual customizado
 aplicar_estilo_tech_minimalista()
 
-mostrar_navegacao()
 st.title("Gestão de Alunos", icon=":material/group:")
 mostrar_aviso()
 
