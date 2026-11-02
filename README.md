@@ -8,7 +8,7 @@
 
 ---
 
-# 🏋️‍♂️ Personal Trainer - App de Gestão Exclusiva (White-Label)
+# 🏋️‍♂️ Personal Trainer - App de Gestão Exclusiva
 
 Plataforma de gestão personalizada para consultoria de Personal Trainers. Desenvolvida sob demanda como alternativa de código aberto e independente a plataformas comerciais terceirizadas, com controle total sobre branding, precificação e metodologia dos treinos.
 

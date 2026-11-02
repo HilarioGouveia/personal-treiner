@@ -1,0 +1,84 @@
+# ==========================================
+# Python & Virtual Environments
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+
+# ==========================================
+# Database Files & Migrations Cache
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+app.db
+
+# ==========================================
+# Streamlit & Frontend Cache
+# ==========================================
+.streamlit/
+!.streamlit/config.toml
+
+# ==========================================
+# IDEs, Editors & OS Files
+# ==========================================
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# Logs & Temporary Files
+# ==========================================
+*.log
+logs/
+*.tmp
+*.bak
