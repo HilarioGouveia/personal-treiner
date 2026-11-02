@@ -1,0 +1,20 @@
+[theme]
+base = "dark"
+primaryColor = "#00E5FF"              # Ciano Elétrico (Tech Accent)
+backgroundColor = "#0E1117"           # Grafite Profundo (Dark Mode)
+secondaryBackgroundColor = "#161B22"  # Cinza Carvão para Cartões/Sidebar
+textColor = "#F0F6FC"                 # Branco Suave para melhor leitura
+font = "sans serif"
+
+baseFontSize = 14
+headingFontSizes = ["2.25rem", "1.7rem", "1.3rem", "1.15rem", "1rem", "0.9rem"]
+headingFontWeights = [600, 600, 600, 600, 600, 600]
+metricValueFontSize = "2rem"
+
+[client]
+toolbarMode = "minimal"
+
+[server]
+headless = true
+enableCORS = true
+enableXsrfProtection = true
