@@ -2,31 +2,52 @@ import streamlit as st
 from services.api_client import criar_aluno, get_alunos
 from utils.styles import aplicar_estilo_tech_minimalista
 from services.demo import mostrar_aviso
+from utils.navigation import mostrar_navegacao
 
 st.set_page_config(
-    page_title="Gestão de Alunos", page_icon="👥", layout="wide"
+    page_title="Gestão de Alunos", page_icon=":material/group:", layout="wide"
 )
 
 
 # Aplicar o tema visual customizado
 aplicar_estilo_tech_minimalista()
 
-st.title("👥 Gestão de Alunos")
+mostrar_navegacao()
+st.title("Gestão de Alunos", icon=":material/group:")
 mostrar_aviso()
 
 # Abas na interface
-aba_lista, aba_cadastro = st.tabs(["📋 Alunos Cadastrados", "➕ Novo Aluno"])
+aba_lista, aba_cadastro = st.tabs([":material/groups: Alunos Cadastrados", ":material/person_add: Novo Aluno"])
 
 with aba_lista:
-  st.subheader("Lista de Alunos Ativos")
+  st.subheader("Alunos Cadastrados")
   alunos = get_alunos()
 
   if alunos:
-    for aluno in alunos:
-      with st.expander(f"📌 {aluno['nome']} - Objetivo: {aluno['objetivo'] or 'Não definido'}"):
-        st.write(f"**E-mail:** {aluno.get('email', 'Não informado')}")
-        st.write(f"**Telefone:** {aluno.get('telefone', 'Não informado')}")
-        st.write(f"**Observações Médicas:** {aluno.get('observacoes_medicas', 'Nenhuma')}")
+    linhas = [{"Nome": a["nome"], "Objetivo": a.get("objetivo") or "Não definido",
+               "Telefone": a.get("telefone") or "Não informado"} for a in alunos]
+    selecao = st.dataframe(
+        linhas, hide_index=True, width="stretch", on_select="rerun",
+        selection_mode="single-row", key="tabela_alunos_" + "_".join(str(a["id"]) for a in alunos),
+    )
+    if selecao.selection.rows:
+      aluno = alunos[selecao.selection.rows[0]]
+      st.subheader(aluno["nome"])
+      st.caption(aluno.get("objetivo") or "Objetivo não definido")
+      if aluno.get("observacoes_medicas"):
+        st.warning(aluno["observacoes_medicas"])
+      for coluna, (texto, icone, pagina) in zip(st.columns(3), [
+          ("Treinos", ":material/fitness_center:", "pages/02_Treinos.py"),
+          ("Avaliações", ":material/monitoring:", "pages/03_Avaliacoes.py"),
+          ("Financeiro", ":material/account_balance_wallet:", "pages/04_Financeiro.py"),
+      ]):
+        if coluna.button(texto, icon=icone, width="stretch"):
+          if st.session_state.get("aluno_selecionado_id") != aluno["id"]:
+            st.session_state.pop("itens_treino_temp", None)
+          st.session_state.aluno_selecionado_id = aluno["id"]
+          st.switch_page(pagina)
+    else:
+      st.info("Selecione um aluno na tabela para acessar Treinos, Avaliações e Financeiro.")
   else:
     st.info(
         "Nenhum aluno cadastrado ainda ou API offline. Cadastre o primeiro"

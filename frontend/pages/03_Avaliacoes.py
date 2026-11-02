@@ -1,7 +1,10 @@
 from datetime import date
 import pandas as pd
 import streamlit as st
+from utils.aluno_context import selecionar_aluno
+from utils.navigation import mostrar_navegacao
 from services.demo import mostrar_aviso
+from utils.charts import grafico_evolucao
 from services.api_client import (
     criar_avaliacao,
     get_alunos,
@@ -9,10 +12,11 @@ from services.api_client import (
 )
 
 st.set_page_config(
-    page_title="Avaliação Física e Evolução", page_icon="📈", layout="wide"
+    page_title="Avaliação Física e Evolução", page_icon=":material/monitoring:", layout="wide"
 )
 
-st.title("📈 Avaliação Física e Gráficos de Evolução")
+mostrar_navegacao()
+st.title("Avaliação Física e Gráficos de Evolução", icon=":material/monitoring:")
 mostrar_aviso()
 
 alunos = get_alunos()
@@ -20,15 +24,12 @@ alunos = get_alunos()
 if not alunos:
   st.warning("Cadastre pelo menos um aluno para gerenciar avaliações físicas.")
 else:
-  aluno_dict = {a["nome"]: a["id"] for a in alunos}
-  aluno_selecionado = st.selectbox(
-      "Selecione o Aluno", options=list(aluno_dict.keys())
-  )
-  aluno_id = aluno_dict[aluno_selecionado]
+  aluno = selecionar_aluno(alunos, "Selecione o Aluno", "avaliacao_aluno")
+  aluno_selecionado, aluno_id = aluno["nome"], aluno["id"]
 
   aba_graficos, aba_registro = st.tabs([
-      "📉 Evolução e Gráficos",
-      "➕ Nova Avaliação Física",
+      ":material/monitoring: Evolução e Gráficos",
+      ":material/add_chart: Nova Avaliação Física",
   ])
 
   # ==========================================
@@ -66,14 +67,21 @@ else:
 
       st.markdown("---")
       st.markdown("### 📊 Gráfico de Evolução de Peso (kg)")
-      # Prepara dataframe para o gráfico de linha do Streamlit
-      df_peso = df.set_index("data_avaliacao")[["peso_kg"]]
-      st.line_chart(df_peso)
+      if len(df) == 1:
+        st.caption("Primeira avaliação registrada. Novas avaliações mostrarão a evolução ao longo do tempo.")
+      st.altair_chart(
+          grafico_evolucao(df, "peso_kg", "Peso (kg)"),
+          width="stretch",
+          alt="Evolução do peso, com um ponto para cada avaliação.",
+      )
 
       if "percentual_gordura" in df.columns and df["percentual_gordura"].notna().any():
         st.markdown("### 📊 Gráfico de Evolução de % de Gordura")
-        df_gordura = df.set_index("data_avaliacao")[["percentual_gordura"]]
-        st.line_chart(df_gordura)
+        st.altair_chart(
+            grafico_evolucao(df, "percentual_gordura", "Gordura (%)"),
+            width="stretch",
+            alt="Evolução do percentual de gordura, com um ponto para cada medição informada.",
+        )
 
       st.markdown("---")
       st.markdown("### 📋 Tabela Detalhada de Registros")

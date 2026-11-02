@@ -1,6 +1,8 @@
 from datetime import date
 import pandas as pd
 import streamlit as st
+from utils.aluno_context import selecionar_aluno
+from utils.navigation import mostrar_navegacao
 from services.demo import mostrar_aviso
 from services.api_client import (
     atualizar_mensalidade,
@@ -10,10 +12,11 @@ from services.api_client import (
 )
 
 st.set_page_config(
-    page_title="Gestão Financeira", page_icon="💰", layout="wide"
+    page_title="Gestão Financeira", page_icon=":material/account_balance_wallet:", layout="wide"
 )
 
-st.title("💰 Gestão Financeira de Mensalidades")
+mostrar_navegacao()
+st.title("Gestão Financeira de Mensalidades", icon=":material/account_balance_wallet:")
 mostrar_aviso()
 
 alunos = get_alunos()
@@ -21,12 +24,11 @@ alunos = get_alunos()
 if not alunos:
   st.warning("Cadastre alunos para gerenciar as mensalidades.")
 else:
-  aluno_dict = {a["nome"]: a["id"] for a in alunos}
-  aluno_sel = st.selectbox("Selecione o Aluno", options=list(aluno_dict.keys()))
-  aluno_id = aluno_dict[aluno_sel]
+  aluno = selecionar_aluno(alunos, "Selecione o Aluno", "financeiro_aluno")
+  aluno_sel, aluno_id = aluno["nome"], aluno["id"]
 
   aba_consulta, aba_nova = st.tabs(
-      ["📋 Mensalidades do Aluno", "➕ Lançar Nova Mensalidade"]
+      [":material/receipt_long: Mensalidades do Aluno", ":material/add_card: Lançar Nova Mensalidade"]
   )
 
   with aba_consulta:

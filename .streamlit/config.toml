@@ -12,6 +12,7 @@ headingFontWeights = [600, 600, 600, 600, 600, 600]
 metricValueFontSize = "2rem"
 
 [client]
+showSidebarNavigation = false
 toolbarMode = "minimal"
 
 [server]

@@ -1,4 +1,6 @@
 import streamlit as st
+from utils.aluno_context import selecionar_aluno
+from utils.navigation import mostrar_navegacao
 from services.demo import mostrar_aviso
 from services.api_client import (
     criar_exercicio,
@@ -9,17 +11,18 @@ from services.api_client import (
 )
 
 st.set_page_config(
-    page_title="Gestão de Fichas e Treinos", page_icon="🏋️‍♂️", layout="wide"
+    page_title="Gestão de Fichas e Treinos", page_icon=":material/fitness_center:", layout="wide"
 )
 
-st.title("🏋️‍♂️ Gestão de Treinos e Exercícios")
+mostrar_navegacao()
+st.title("Gestão de Treinos e Exercícios", icon=":material/fitness_center:")
 mostrar_aviso()
 
 # Abas principais da tela
 aba_construtor, aba_catalogo, aba_visualizar = st.tabs([
-    "📋 Montar Ficha de Treino",
-    "📚 Catálogo de Exercícios",
-    "👁️ Visualizar Fichas do Aluno",
+    ":material/edit_note: Montar Ficha de Treino",
+    ":material/fitness_center: Catálogo de Exercícios",
+    ":material/visibility: Visualizar Fichas do Aluno",
 ])
 
 # ==========================================
@@ -40,11 +43,7 @@ with aba_construtor:
     )
   else:
     # Seleção do Aluno
-    aluno_dict = {a["nome"]: a["id"] for a in alunos}
-    aluno_selecionado = st.selectbox(
-        "Selecione o Aluno", options=list(aluno_dict.keys())
-    )
-    aluno_id = aluno_dict[aluno_selecionado]
+    aluno_id = selecionar_aluno(alunos, "Selecione o Aluno", "treino_aluno")["id"]
 
     with st.form("form_ficha_treino"):
       titulo_ficha = st.text_input(
@@ -223,13 +222,7 @@ with aba_catalogo:
 with aba_visualizar:
   st.subheader("Histórico de Fichas Prescritas")
   if alunos:
-    aluno_dict_viz = {a["nome"]: a["id"] for a in alunos}
-    aluno_sel_viz = st.selectbox(
-        "Selecione o Aluno para Auditoria",
-        options=list(aluno_dict_viz.keys()),
-        key="viz_aluno",
-    )
-    id_aluno_viz = aluno_dict_viz[aluno_sel_viz]
+    id_aluno_viz = selecionar_aluno(alunos, "Selecione o Aluno para Auditoria", "viz_aluno")["id"]
 
     fichas = get_fichas_aluno(id_aluno_viz)
     if fichas:

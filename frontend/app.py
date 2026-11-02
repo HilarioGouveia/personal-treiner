@@ -1,13 +1,15 @@
 import streamlit as st
 from utils.styles import aplicar_estilo_tech_minimalista
 from services import demo
+from utils.navigation import mostrar_navegacao
 
 st.set_page_config(
-    page_title="Gestão - Personal Trainer", page_icon="🏋️‍♂️", layout="wide"
+    page_title="Gestão - Personal Trainer", page_icon=":material/fitness_center:", layout="wide"
 )
 
 # Aplicar o tema visual customizado
 aplicar_estilo_tech_minimalista()
+mostrar_navegacao()
 demo.mostrar_aviso()
 
 
@@ -16,7 +18,7 @@ if "logged_in" not in st.session_state:
   st.session_state.logged_in = False
 
 if not st.session_state.logged_in and not demo.ativo():
-  st.title("🔐 Acesso ao Sistema")
+  st.title("Acesso ao Sistema", icon=":material/lock:")
   st.subheader("Faça login para gerenciar sua consultoria")
 
   with st.form("login_form"):
@@ -33,7 +35,7 @@ if not st.session_state.logged_in and not demo.ativo():
       else:
         st.error("E-mail ou senha inválidos.")
 else:
-  st.title("Painel de Controle - Personal Trainer")
+  st.title("Painel de Controle - Personal Trainer", icon=":material/home:")
   st.write(
       "Bem-vindo de volta! Utilize o menu lateral para navegar entre os"
       " módulos de Alunos, Treinos e Financeiro."
