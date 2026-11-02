@@ -1,4 +1,5 @@
 import streamlit as st
+from services.demo import mostrar_aviso
 from services.api_client import (
     criar_exercicio,
     criar_ficha_treino,
@@ -12,6 +13,7 @@ st.set_page_config(
 )
 
 st.title("🏋️‍♂️ Gestão de Treinos e Exercícios")
+mostrar_aviso()
 
 # Abas principais da tela
 aba_construtor, aba_catalogo, aba_visualizar = st.tabs([
@@ -120,12 +122,12 @@ with aba_construtor:
               f" {item['carga_kg']}kg | Descanso: {item['descanso_segundos']}s"
           )
 
-        if st.button("🗑️ Limpar Lista de Exercícios"):
+        if st.form_submit_button("🗑️ Limpar Lista de Exercícios"):
           st.session_state.itens_treino_temp = []
           st.rerun()
 
       # Botão para salvar a ficha completa no Backend
-      salvar_ficha = st.button("💾 Salvar e Publicar Ficha de Treino")
+      salvar_ficha = st.form_submit_button("💾 Salvar e Publicar Ficha de Treino")
 
       if salvar_ficha:
         if not titulo_ficha:

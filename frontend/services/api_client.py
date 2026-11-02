@@ -1,10 +1,18 @@
 import requests
+import streamlit as st
+from services import demo
 
-API_BASE_URL = "http://localhost:8000/api/v1"
+# Tenta ler do Streamlit Secrets ou usa o localhost como fallback
+try:
+  API_BASE_URL = st.secrets["API_BASE_URL"]
+except:
+  API_BASE_URL = "http://localhost:8000/api/v1"
 
 
 # --- ALUNOS ---
 def get_alunos():
+  if demo.ativo():
+    return demo.listar("alunos")
   try:
     response = requests.get(f"{API_BASE_URL}/alunos/")
     if response.status_code == 200:
@@ -15,8 +23,10 @@ def get_alunos():
     return []
 
 def criar_aluno(dados_aluno):
+  if demo.ativo():
+    return demo.criar("alunos", dados_aluno)
   try:
-    response = requests.post(f"{API_BASE_URL}/alunos/", json=dados_aluno)
+    response = requests.post(f"{API_BASE_URL}/alunos/", json=dados_aluno, timeout=15)
     return response
   except Exception as e:
     return None
@@ -24,6 +34,8 @@ def criar_aluno(dados_aluno):
 
 # --- EXERCÍCIOS ---
 def get_exercicios():
+  if demo.ativo():
+    return demo.listar("exercicios")
   try:
     res = requests.get(f"{API_BASE_URL}/treinos/exercicios/")
     return res.json() if res.status_code == 200 else []
@@ -31,6 +43,8 @@ def get_exercicios():
     return []
 
 def criar_exercicio(payload):
+  if demo.ativo():
+    return demo.criar("exercicios", payload)
   try:
     return requests.post(f"{API_BASE_URL}/treinos/exercicios/", json=payload)
   except:
@@ -39,6 +53,8 @@ def criar_exercicio(payload):
 
 # --- FICHAS ---
 def get_fichas_aluno(aluno_id: int):
+  if demo.ativo():
+    return demo.listar("fichas", aluno_id)
   try:
     res = requests.get(f"{API_BASE_URL}/treinos/fichas/aluno/{aluno_id}")
     return res.json() if res.status_code == 200 else []
@@ -46,6 +62,8 @@ def get_fichas_aluno(aluno_id: int):
     return []
 
 def criar_ficha_treino(payload):
+  if demo.ativo():
+    return demo.criar("fichas", payload)
   try:
     return requests.post(f"{API_BASE_URL}/treinos/fichas/", json=payload)
   except:
@@ -54,6 +72,8 @@ def criar_ficha_treino(payload):
 
 # --- AVALIAÇÕES ---
 def get_avaliacoes_aluno(aluno_id: int):
+  if demo.ativo():
+    return demo.listar("avaliacoes", aluno_id)
   try:
     response = requests.get(f"{API_BASE_URL}/avaliacoes/aluno/{aluno_id}")
     return response.json() if response.status_code == 200 else []
@@ -62,13 +82,17 @@ def get_avaliacoes_aluno(aluno_id: int):
 
 
 def criar_avaliacao(dados_avaliacao):
+  if demo.ativo():
+    return demo.criar("avaliacoes", dados_avaliacao)
   try:
-    return requests.post(f"{API_BASE_URL}/avaliacoes/", json=dados_avaliacao)
+    return requests.post(f"{API_BASE_URL}/avaliacoes/", json=dados_avaliacao, timeout=15)
   except:
     return None
   
 
 def get_mensalidades_aluno(aluno_id: int):
+  if demo.ativo():
+    return demo.listar("mensalidades", aluno_id)
   try:
     response = requests.get(f"{API_BASE_URL}/mensalidades/aluno/{aluno_id}")
     return response.json() if response.status_code == 200 else []
@@ -77,6 +101,8 @@ def get_mensalidades_aluno(aluno_id: int):
 
 
 def criar_mensalidade(dados):
+  if demo.ativo():
+    return demo.criar("mensalidades", dados)
   try:
     return requests.post(f"{API_BASE_URL}/mensalidades/", json=dados)
   except:
@@ -84,6 +110,8 @@ def criar_mensalidade(dados):
 
 
 def atualizar_mensalidade(mensalidade_id: int, dados):
+  if demo.ativo():
+    return demo.atualizar_mensalidade(mensalidade_id, dados)
   try:
     return requests.patch(
         f"{API_BASE_URL}/mensalidades/{mensalidade_id}", json=dados

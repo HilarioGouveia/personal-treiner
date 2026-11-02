@@ -1,6 +1,7 @@
 import streamlit as st
 from services.api_client import criar_aluno, get_alunos
 from utils.styles import aplicar_estilo_tech_minimalista
+from services.demo import mostrar_aviso
 
 st.set_page_config(
     page_title="Gestão de Alunos", page_icon="👥", layout="wide"
@@ -11,6 +12,7 @@ st.set_page_config(
 aplicar_estilo_tech_minimalista()
 
 st.title("👥 Gestão de Alunos")
+mostrar_aviso()
 
 # Abas na interface
 aba_lista, aba_cadastro = st.tabs(["📋 Alunos Cadastrados", "➕ Novo Aluno"])
@@ -42,7 +44,7 @@ with aba_cadastro:
       senha = st.text_input("Senha Temporária *", type="password")
     with col2:
       telefone = st.text_input("Telefone / WhatsApp")
-      data_nascimento = st.date_input("Data de Nascimento")
+      data_nascimento = st.date_input("Data de Nascimento", format="DD/MM/YYYY")
       objetivo = st.text_input("Objetivo Principal (Ex: Hipertrofia)")
 
     observacoes_medicas = st.text_area(
@@ -65,7 +67,16 @@ with aba_cadastro:
             "observacoes_medicas": observacoes_medicas,
         }
         response = criar_aluno(payload)
-        if response and response.status_code == 201:
+        if response is not None and response.status_code == 201:
           st.success(f"Aluno {nome} cadastrado com sucesso!")
+        elif response is None:
+          st.error("Não foi possível conectar à API ou o tempo de resposta foi excedido.")
         else:
-          st.error("Erro ao cadastrar aluno. Verifique os dados e a conexão.")
+          try:
+            detalhe = response.json().get("detail")
+          except (ValueError, AttributeError):
+            detalhe = None
+          if isinstance(detalhe, str) and response.status_code < 500:
+            st.error(f"Erro ao cadastrar aluno: {detalhe}")
+          else:
+            st.error(f"Erro ao cadastrar aluno (HTTP {response.status_code}). Verifique os logs da API.")

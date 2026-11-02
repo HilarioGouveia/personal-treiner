@@ -1,6 +1,7 @@
 from datetime import date
 import pandas as pd
 import streamlit as st
+from services.demo import mostrar_aviso
 from services.api_client import (
     criar_avaliacao,
     get_alunos,
@@ -12,6 +13,7 @@ st.set_page_config(
 )
 
 st.title("📈 Avaliação Física e Gráficos de Evolução")
+mostrar_aviso()
 
 alunos = get_alunos()
 
@@ -133,10 +135,17 @@ else:
         }
 
         res = criar_avaliacao(payload_av)
-        if res and res.status_code == 201:
+        if res is not None and res.status_code == 201:
           st.success("Avaliação física registrada com sucesso!")
           st.rerun()
+        elif res is None:
+          st.error("Não foi possível conectar à API ou o tempo de resposta foi excedido.")
         else:
-          st.error(
-              "Erro ao registrar avaliação. Verifique a conexão com a API."
-          )
+          try:
+            detalhe = res.json().get("detail")
+          except (ValueError, AttributeError):
+            detalhe = None
+          if isinstance(detalhe, str) and res.status_code < 500:
+            st.error(f"Erro ao registrar avaliação: {detalhe}")
+          else:
+            st.error(f"Erro ao registrar avaliação (HTTP {res.status_code}). Verifique os logs da API.")

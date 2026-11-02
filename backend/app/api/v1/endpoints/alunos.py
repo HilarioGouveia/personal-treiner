@@ -3,11 +3,10 @@ from app.core.database import get_db
 from app.models.models import Aluno, PerfilUsuario, Usuario
 from app.schemas.schemas import AlunoCreate, AlunoResponse
 from fastapi import APIRouter, Depends, HTTPException, status
-from passlib.context import CryptContext
+import bcrypt
 from sqlalchemy.orm import Session
 
 router = APIRouter()
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @router.post("/", response_model=AlunoResponse, status_code=status.HTTP_201_CREATED)
@@ -20,15 +19,17 @@ def criar_aluno(aluno_in: AlunoCreate, db: Session = Depends(get_db)):
     raise HTTPException(status_code=400, detail="E-mail já cadastrado no sistema.")
 
   # Cria o registro de usuário
-  hashed_password = pwd_context.hash(aluno_in.senha)
+  senha_bytes = aluno_in.senha.encode("utf-8")
+  if len(senha_bytes) > 72:
+    raise HTTPException(status_code=422, detail="A senha deve ter no máximo 72 bytes em UTF-8.")
+  hashed_password = bcrypt.hashpw(senha_bytes, bcrypt.gensalt()).decode("utf-8")
   novo_usuario = Usuario(
       email=aluno_in.email,
       senha_hash=hashed_password,
       perfil=PerfilUsuario.ALUNO,
   )
   db.add(novo_usuario)
-  db.commit()
-  db.refresh(novo_usuario)
+  db.flush()
 
   # Cria o perfil de aluno vinculado ao usuário
   novo_aluno = Aluno(

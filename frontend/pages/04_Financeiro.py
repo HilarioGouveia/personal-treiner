@@ -1,6 +1,7 @@
 from datetime import date
 import pandas as pd
 import streamlit as st
+from services.demo import mostrar_aviso
 from services.api_client import (
     atualizar_mensalidade,
     criar_mensalidade,
@@ -13,6 +14,7 @@ st.set_page_config(
 )
 
 st.title("💰 Gestão Financeira de Mensalidades")
+mostrar_aviso()
 
 alunos = get_alunos()
 

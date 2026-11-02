@@ -138,7 +138,7 @@ python -m venv venv
 source venv/bin/activate  # Ou `venv\Scripts\activate` no Windows
 
 pip install -r requirements.txt
-alembic upgrade head
+python init_db.py
 uvicorn app.main:app --reload --port 8000
 ```
 
@@ -154,13 +154,38 @@ python -m venv venv
 source venv/bin/activate
 
 pip install -r requirements.txt
-streamlit run app.py
+cd ..
+python -m streamlit run frontend/app.py
 
 ```
 
 *A interface web será aberta automaticamente no endereço `http://localhost:8501`.*
 
+Execute o Streamlit a partir da raiz do projeto para carregar
+`.streamlit/config.toml`. Ao iniciar dentro de `frontend`, a configuração
+da pasta pai não é carregada e o tema padrão é usado.
+
 ---
+
+## Demonstração no Streamlit Cloud
+
+Consulte [o guia de demonstração](docs/streamlit-cloud-demo.md) para executar
+com dados fictícios por sessão, sem depender da API ou do SQLite.
+
+## Testes do cadastro de alunos
+
+Instale as dependências de teste e execute na raiz:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements-test.txt
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+```
+
+Os testes de interface usam o AppTest do Streamlit com chamadas simuladas.
+Os testes de integração exercitam a API FastAPI com SQLite em arquivo
+temporário, sem alterar o banco local. Cobrem persistência após nova conexão,
+data de nascimento, hash da senha, e-mail duplicado e reversão da transação
+quando a criação do perfil falha.
 
 ## 🛡️ Licença
 
