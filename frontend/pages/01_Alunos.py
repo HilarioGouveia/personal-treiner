@@ -36,8 +36,8 @@ with aba_lista:
       if aluno.get("observacoes_medicas"):
         st.warning(aluno["observacoes_medicas"])
       for coluna, (texto, icone, pagina) in zip(st.columns(3), [
-          ("Treinos", ":material/fitness_center:", "pages/02_Treinos.py"),
-          ("Avaliações", ":material/monitoring:", "pages/03_Avaliacoes.py"),
+          ("Treinos", ":material/exercise:", "pages/02_Treinos.py"),
+          ("Avaliações", ":material/bar_chart_4_bars:", "pages/03_Avaliacoes.py"),
           ("Financeiro", ":material/account_balance_wallet:", "pages/04_Financeiro.py"),
       ]):
         if coluna.button(texto, icon=icone, width="stretch"):

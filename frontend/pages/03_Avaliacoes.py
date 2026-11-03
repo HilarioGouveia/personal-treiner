@@ -12,10 +12,10 @@ from services.api_client import (
 
 st.set_page_config(
     initial_sidebar_state="auto",
-    page_title="Avaliação Física e Evolução", page_icon=":material/monitoring:", layout="wide"
+    page_title="Avaliação Física e Evolução", page_icon=":material/bar_chart_4_bars:", layout="wide"
 )
 
-st.title("Avaliação Física e Gráficos de Evolução", icon=":material/monitoring:")
+st.title("Avaliação Física e Gráficos de Evolução", icon=":material/bar_chart_4_bars:")
 mostrar_aviso()
 
 alunos = get_alunos()
@@ -27,7 +27,7 @@ else:
   aluno_selecionado, aluno_id = aluno["nome"], aluno["id"]
 
   aba_graficos, aba_registro = st.tabs([
-      ":material/monitoring: Evolução e Gráficos",
+      ":material/bar_chart_4_bars: Evolução e Gráficos",
       ":material/add_chart: Nova Avaliação Física",
   ])
 
@@ -65,7 +65,7 @@ else:
         st.metric("Total de Avaliações", len(df))
 
       st.markdown("---")
-      st.markdown("### 📊 Gráfico de Evolução de Peso (kg)")
+      st.markdown("### :material/bar_chart_4_bars: Gráfico de Evolução de Peso (kg)")
       if len(df) == 1:
         st.caption("Primeira avaliação registrada. Novas avaliações mostrarão a evolução ao longo do tempo.")
       st.altair_chart(
@@ -75,7 +75,7 @@ else:
       )
 
       if "percentual_gordura" in df.columns and df["percentual_gordura"].notna().any():
-        st.markdown("### 📊 Gráfico de Evolução de % de Gordura")
+        st.markdown("### :material/bar_chart_4_bars: Gráfico de Evolução de % de Gordura")
         st.altair_chart(
             grafico_evolucao(df, "percentual_gordura", "Gordura (%)"),
             width="stretch",
@@ -83,7 +83,7 @@ else:
         )
 
       st.markdown("---")
-      st.markdown("### 📋 Tabela Detalhada de Registros")
+      st.markdown("### :material/table: Tabela Detalhada de Registros")
       st.dataframe(df[["data_avaliacao", "peso_kg", "altura_cm", "percentual_gordura", "observacoes"]])
 
     else:

@@ -11,16 +11,16 @@ from services.api_client import (
 
 st.set_page_config(
     initial_sidebar_state="auto",
-    page_title="Gestão de Fichas e Treinos", page_icon=":material/fitness_center:", layout="wide"
+    page_title="Gestão de Fichas e Treinos", page_icon=":material/exercise:", layout="wide"
 )
 
-st.title("Gestão de Treinos e Exercícios", icon=":material/fitness_center:")
+st.title("Gestão de Treinos e Exercícios", icon=":material/exercise:")
 mostrar_aviso()
 
 # Abas principais da tela
 aba_construtor, aba_catalogo, aba_visualizar = st.tabs([
     ":material/edit_note: Montar Ficha de Treino",
-    ":material/fitness_center: Catálogo de Exercícios",
+    ":material/exercise: Catálogo de Exercícios",
     ":material/visibility: Visualizar Fichas do Aluno",
 ])
 
