@@ -5,6 +5,20 @@ st.set_page_config(
     layout="wide", initial_sidebar_state="auto",
 )
 
+# O menu nativo usa uma fonte menor que a base; mantém leitura e toque confortáveis.
+st.html("""
+<style>
+nav[aria-label="App pages"] a {
+    min-height: 2.75rem;
+    font-size: 1rem;
+}
+nav[aria-label="App pages"] a p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+</style>
+""")
+
 pagina = st.navigation([
     st.Page("home.py", title="Início", icon=":material/home:", default=True),
     st.Page("pages/01_Alunos.py", title="Alunos", icon=":material/group:", url_path="Alunos"),

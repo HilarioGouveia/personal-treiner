@@ -2,7 +2,7 @@ import streamlit as st
 
 
 def aplicar_estilo_tech_minimalista():
-  st.markdown(
+  st.html(
       """
         <style>
             /* Importar fonte geométrica moderna */
@@ -53,5 +53,4 @@ def aplicar_estilo_tech_minimalista():
             }
         </style>
         """,
-      unsafe_allow_html=True,
   )
